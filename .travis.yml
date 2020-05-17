@@ -246,6 +246,28 @@ jobs:
 
   - stage: Deploy  👨‍✈️
     #more emoji ideas: 👨‍🚀 // 🚀🚢🛳️🚁🛫✈️ / 📦 
+    #other services like docker hub, aur pacakge etc. possible
+
+
+    name: 🌐 Build new strings for translation/translators
+    #more emoji ideas: 💬🗨️
+    if: tag IS NOT present
+    # better only beta releases? or too complex?
+    os: linux
+    group: stable
+    script: bash ./.ci/travis-deploy.sh --build-strings
+# compile with translation flag enabled
+# commit changes to main cockatrice github repo (open pr for approval), not every change needs to get merged and has to trigger a new transifex pull/update and mail notification for all translators
+# should only be done once actual strings got changed, added, removed
+
+    name: 🌐 transifex
+    #more emoji ideas: 💬🗨️
+    if: (branch = master AND NOT type = pull_request) AND tag IS present
+    os: linux
+    group: stable
+    script: bash ./.ci/travis-deploy.sh --transifex
+# script --> transifex
+# needed at all? check api again, transifex pulls daily too
 
     name: 📦 flatpak (hosted @ Flathub)
     if: (branch = master AND NOT type = pull_request) AND tag IS present
